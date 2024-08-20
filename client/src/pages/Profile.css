@@ -1,0 +1,104 @@
+/* Profile Page Styles */
+.profile-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-loading {
+    color: #007bff;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .profile-error {
+    color: #dc3545;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .profile-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .profile-form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .profile-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+  }
+  
+  .profile-input {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 4px;
+    border: 1px solid #e0e0e0;
+  }
+  
+  .profile-error-message {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+  
+  .profile-submit-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1rem;
+  }
+  
+  .profile-submit-button:hover {
+    background-color: #218838;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    .profile-container {
+      padding: 1rem;
+      margin: 1rem;
+    }
+  
+    .profile-loading,
+    .profile-error {
+      font-size: 1rem;
+    }
+  
+    .profile-form-group {
+      margin-bottom: 1rem;
+    }
+  
+    .profile-submit-button {
+      font-size: 0.875rem;
+      padding: 0.5rem 1rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .profile-container {
+      padding: 0.75rem;
+      margin: 0.5rem;
+    }
+  
+    .profile-loading,
+    .profile-error {
+      font-size: 0.875rem;
+    }
+  
+    .profile-submit-button {
+      font-size: 0.75rem;
+      padding: 0.5rem 0.75rem;
+    }
+  }
+  

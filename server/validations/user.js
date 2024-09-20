@@ -1,17 +1,27 @@
 //user.js
 import Joi from 'joi';
 
-
-
- 
 export const updateUserValidation = (userInfo) => {
     const schema = Joi.object({
-      
-            firstName: Joi.string().min(2).required(),  
-            lastName: Joi.string().min(2).required(),  
-            email: Joi.string().email().required(),  
-            password: Joi.string().min(5).required(), 
-            currentPassword: Joi.string().min(5)  
-        });
-    return schema.validate(userInfo);  // Return the result of the validation
+        _id: Joi.string().optional(),
+        firstName: Joi.string().min(2).optional().messages({
+            
+        }),
+        lastName: Joi.string().min(2).optional().messages({
+            
+        }),
+        email: Joi.string().email().optional().messages({
+        }),
+        password: Joi.string().min(5).optional().messages({
+        }),
+        role: Joi.string().optional().valid('admin', 'user').messages({
+        }),
+        currentPassword: Joi.string().optional().messages({
+        }),
+        orders: Joi.array().items(Joi.string()).optional(),
+        createdAt: Joi.date().optional(),
+        updatedAt: Joi.date().optional(),
+    });
+
+    return schema.validate(userInfo);
 };

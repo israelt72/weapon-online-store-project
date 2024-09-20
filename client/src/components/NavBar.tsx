@@ -1,29 +1,66 @@
-// src/components/NavBar.tsx
-// src/components/NavBar.tsx
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../app/appStore';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShoppingCart, faBars } from '@fortawesome/free-solid-svg-icons';
+import { faShoppingCart, faBars, faVolumeUp, faVolumeMute } from '@fortawesome/free-solid-svg-icons';
 import { getProfile, logoutUser } from '../redux/userSlice';
 import { Link, NavLink } from 'react-router-dom';
-import Cookies from 'js-cookie';
 import './styles.css';
 
 const NavBar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useState(true);
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const user = useSelector((state: RootState) => state.user.user);
   const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    const token = Cookies.get('access_token');
-    if (token && !isAuthenticated) {
-      // Only dispatch getProfile if the token exists and the user is not authenticated
+    const token = sessionStorage.getItem('access_token');
+    if (token && !user) {
       dispatch(getProfile());
+    } else if (!token) {
+      dispatch(logoutUser());
     }
-  }, [dispatch, isAuthenticated]);
+  }, [dispatch, user]);
+
+  useEffect(() => {
+    const savedSoundEnabled = localStorage.getItem('soundEnabled') === 'true';
+    setSoundEnabled(savedSoundEnabled);
+
+    if (!savedSoundEnabled) {
+      stopAllSounds();
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('soundEnabled', soundEnabled.toString());
+
+    if (soundEnabled) {
+      playSounds();
+    } else {
+      stopAllSounds();
+    }
+  }, [soundEnabled]);
+
+  const stopAllSounds = () => {
+    const audioElements = document.querySelectorAll('audio');
+    audioElements.forEach(audio => {
+      const element = audio as HTMLAudioElement;
+      element.pause();
+      element.currentTime = 0;
+    });
+  };
+
+  const playSounds = () => {
+    const soundElements = document.querySelectorAll('audio');
+    soundElements.forEach(audio => {
+      const element = audio as HTMLAudioElement;
+      if (!element.paused) {
+        element.play();
+      }
+    });
+  };
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -31,8 +68,38 @@ const NavBar: React.FC = () => {
 
   const handleLogoutClick = async (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
-    dispatch(logoutUser()); // Clear user data
-    Cookies.remove('access_token'); // Remove token cookie
+    sessionStorage.removeItem('access_token');
+    dispatch(logoutUser());
+    stopAllSounds();
+    window.location.href = '/';
+  };
+
+  const toggleSound = () => {
+    const newSoundEnabled = !soundEnabled;
+    setSoundEnabled(newSoundEnabled);
+  };
+
+  const handleHover = () => {
+    if (soundEnabled) {
+      const hoverSound = document.getElementById('hoverSound') as HTMLAudioElement;
+      if (hoverSound) {
+        hoverSound.play();
+      }
+    }
+  };
+
+  const handleClick = () => {
+    if (soundEnabled) {
+      const clickSound = document.getElementById('clickSound') as HTMLAudioElement;
+      if (clickSound) {
+        clickSound.play();
+      }
+    }
+  };
+
+  const handleNavLinkInteraction = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    handleClick();
+    handleHover();
   };
 
   return (
@@ -65,22 +132,27 @@ const NavBar: React.FC = () => {
             <li className="nav-item">
               <span className="nav-link">Welcome, {user?.firstName || 'User'}</span>
             </li>
-            <li className="nav-item">
-              <NavLink
-                to="/orders"
-                className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
-              >
-                My Orders
-              </NavLink>
-            </li>
+           
             <li className="nav-item">
               <NavLink
                 to="/profile"
                 className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
+                onClick={handleNavLinkInteraction}
               >
                 My Profile
               </NavLink>
             </li>
+            {user?.role === 'admin' && (
+              <li className="nav-item">
+                <NavLink
+                  to="/admin"
+                  className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
+                  onClick={handleNavLinkInteraction}
+                >
+                  Admin Dashboard
+                </NavLink>
+              </li>
+            )}
             <li className="nav-item">
               <NavLink
                 to="/logout"
@@ -105,7 +177,15 @@ const NavBar: React.FC = () => {
             </li>
           </>
         )}
+        <li className="nav-item">
+          <button onClick={toggleSound} className="sound-toggle-button">
+            <FontAwesomeIcon icon={soundEnabled ? faVolumeUp : faVolumeMute} />
+          </button>
+        </li>
       </ul>
+      <audio id="interactionSound" src="/assets/sound/The Good, the Bad and the Ugly.mp3" />
+      <audio id="clickSound" src="/assets/sound/Gunshot.mp3" />
+      <audio id="hoverSound" src="/assets/sound/Gun Sound Effects.mp3" />
     </nav>
   );
 };

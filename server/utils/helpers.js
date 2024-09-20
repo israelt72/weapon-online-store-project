@@ -5,16 +5,23 @@ import jwt from 'jsonwebtoken';
  * Function to calculate the total price of an order
  * @param {Array} products - Array of product objects with `price` and `quantity`
  * @returns {number} Total order amount
+ * @throws {Error} If products is not an array or any product price or quantity is not a number
  */
 export const calculateTotalPrice = (products) => {
   if (!Array.isArray(products)) {
     throw new Error('Products should be an array');
   }
+
   return products.reduce((total, product) => {
-    if (typeof product.price !== 'number' || typeof product.quantity !== 'number') {
-      throw new Error('Product price and quantity should be numbers');
+    // Ensure price and quantity are valid numbers
+    const price = Number(product.price);
+    const quantity = Number(product.quantity);
+
+    if (isNaN(price) || isNaN(quantity)) {
+      throw new Error('Product price and quantity should be valid numbers');
     }
-    return total + (product.price * product.quantity);
+
+    return total + (price * quantity);
   }, 0);
 };
 
@@ -22,6 +29,7 @@ export const calculateTotalPrice = (products) => {
  * Function to check if an email is valid
  * @param {string} email - Email to be checked
  * @returns {boolean} Whether the email is valid or not
+ * @throws {Error} If email is not a string
  */
 export const isValidEmail = (email) => {
   if (typeof email !== 'string') {
@@ -35,6 +43,7 @@ export const isValidEmail = (email) => {
  * Function to generate a random string of a given length
  * @param {number} length - Desired length of the string
  * @returns {string} Random string
+ * @throws {Error} If length is not a positive number
  */
 export const generateRandomString = (length) => {
   if (typeof length !== 'number' || length <= 0) {
@@ -53,6 +62,7 @@ export const generateRandomString = (length) => {
  * @param {Object} payload - Data to be included in the token
  * @param {string} [expiresIn='1h'] - Token expiry time (e.g., '5h')
  * @returns {string} Created JWT token
+ * @throws {Error} If TOKEN_SECRET is not defined in environment variables
  */
 export const createToken = (payload, expiresIn = '1h') => {
   const secret = process.env.TOKEN_SECRET;
@@ -66,6 +76,7 @@ export const createToken = (payload, expiresIn = '1h') => {
  * Function to extract a token from the 'Authorization' header
  * @param {Object} req - Request object
  * @returns {string|null} Token from the 'Authorization' header, or null if not present
+ * @throws {Error} If req is not an object
  */
 export const getTokenFromRequest = (req) => {
   if (!req || typeof req !== 'object') {
@@ -87,10 +98,11 @@ export const getEnv = () => {
 };
 
 /**
- * Function to calculate price including tax
- * @param {number} price - Price before tax
- * @param {number} taxRate - Tax rate (as a number between 0 and 1)
+ * Function to calculate the price with tax
+ * @param {number} price - Original price
+ * @param {number} taxRate - Tax rate as a decimal (e.g., 0.1 for 10%)
  * @returns {number} Price including tax
+ * @throws {Error} If price or taxRate are not numbers or if taxRate is not between 0 and 1
  */
 export const calculatePriceWithTax = (price, taxRate) => {
   if (typeof price !== 'number' || typeof taxRate !== 'number') {
@@ -106,6 +118,7 @@ export const calculatePriceWithTax = (price, taxRate) => {
  * Function to convert a date to 'YYYY-MM-DD' format
  * @param {Date} date - Date to be formatted
  * @returns {string} Formatted date as 'YYYY-MM-DD'
+ * @throws {Error} If date is not a Date object
  */
 export const formatDate = (date) => {
   if (!(date instanceof Date)) {

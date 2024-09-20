@@ -1,6 +1,6 @@
 //Footer.tsx
 import React from 'react';
-import './styles.css';
+import './footer.css';
 
 const Footer: React.FC = () => {
   return (
@@ -18,8 +18,7 @@ const Footer: React.FC = () => {
           <ul>
             <li><a href="/aboutUs">About Us</a></li>
             <li><a href="/contactus">Contact Us</a></li>
-            <li><a href="/privacy-policy">Privacy Policy</a></li>
-            <li><a href="/terms-of-service">Terms of Service</a></li>
+          
           </ul>
         </div>
         <div className="footer-right">
@@ -27,11 +26,7 @@ const Footer: React.FC = () => {
           <p>Email: israel.taub1@gmail.com</p>
           <p>Phone: 0524637084</p>
         </div>
-        {/* <div className="footer-social">
-          <a href="#" target="_blank" rel="noopener noreferrer"><i className="fab fa-facebook-f"></i></a>
-          <a href="#" target="_blank" rel="noopener noreferrer"><i className="fab fa-twitter"></i></a>
-          <a href="#" target="_blank" rel="noopener noreferrer"><i className="fab fa-instagram"></i></a>
-        </div> */}
+     
       </div>
       <div className="footer-bottom">
         <p>&copy; {new Date().getFullYear()} ISRAEL TAUB. All Rights Reserved.</p>

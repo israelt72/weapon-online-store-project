@@ -1,0 +1,51 @@
+/* OrderCard.module.css */
+
+.order-card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  margin: 16px;
+  max-width: 500px;
+  width: 100%;
+  font-family: Arial, sans-serif;
+}
+
+.order-card h2 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 16px;
+}
+
+.order-card ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.order-card li {
+  font-size: 1rem;
+  color: #666;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.order-card li:last-child {
+  border-bottom: none;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .order-card {
+    padding: 12px;
+    margin: 8px;
+  }
+
+  .order-card h2 {
+    font-size: 1.25rem;
+  }
+
+  .order-card li {
+    font-size: 0.875rem;
+  }
+}

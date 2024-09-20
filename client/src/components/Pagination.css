@@ -1,0 +1,36 @@
+.product-list-container {
+    display: flex;
+    flex-direction: column;
+    
+  }
+.pagination {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 5px; 
+    /* margin: 20px 0; */
+    width: 100%;
+  }
+ .pagination-container{
+    display: flex;
+   flex-direction: row-reverse;
+   flex-wrap: wrap;
+ }
+  .pagination-button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .pagination-button:hover {
+    background-color: #ddd;
+  }
+  
+  .pagination-button.active {
+    background-color: #007bff;
+    color: white;
+  }
+  

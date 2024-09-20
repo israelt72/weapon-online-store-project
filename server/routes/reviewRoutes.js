@@ -2,15 +2,16 @@
 import { Router } from 'express';
 import Review from '../schemas/reviewSchema.js';
 import Product from '../schemas/productSchema.js';
+import Order from '../schemas/orderSchema.js'; // Ensure you import the Order schema
 import { authenticateUser } from '../middleware/auth.js';
 import { createReviewValidation, updateReviewValidation } from '../validations/review.js';
 
 const router = Router();
 
 /**
- * Get all reviews for a product => http://localhost:3000/api/reviews/:productId
+ * Get all reviews for a product => http://localhost:3000/api/products/:productId/reviews
  */
-router.get('/:productId', async (req, res) => {
+router.get('/:productId/reviews', async (req, res) => {
     try {
         const reviews = await Review.find({ product: req.params.productId });
         if (!reviews.length) {
@@ -24,10 +25,11 @@ router.get('/:productId', async (req, res) => {
 });
 
 /**
- * Create a new review => http://localhost:3000/api/reviews
+ * Create a new review => http://localhost:3000/api/products/:productId/reviews
  */
-router.post('/', authenticateUser, async (req, res) => {
-    const { product, rating, comment } = req.body;
+router.post('/:productId/reviews', authenticateUser, async (req, res) => {
+    const { productId } = req.params;
+    const { rating, comment } = req.body;
 
     // Validate request data
     const { error } = createReviewValidation(req.body);
@@ -37,14 +39,14 @@ router.post('/', authenticateUser, async (req, res) => {
     }
 
     try {
-        const productExists = await Product.findById(product);
+        const productExists = await Product.findById(productId);
         if (!productExists) {
             return res.status(404).send({ error: 'Product not found' });
         }
 
         const review = new Review({
-            user: req.user.id,  // Assumes req.user is set by authenticateUser middleware
-            product,
+            user: req.user.id,
+            product: productId,
             rating,
             comment,
         });
@@ -92,8 +94,14 @@ router.put('/review/:id', authenticateUser, async (req, res) => {
             return res.status(404).send({ error: 'Review not found' });
         }
 
-        // Ensure the review belongs to the user
+        // Check if the review belongs to the user
         if (review.user.toString() !== req.user.id) {
+            return res.status(403).send({ error: 'Unauthorized' });
+        }
+
+        // Ensure the review belongs to an order of the user
+        const order = await Order.findOne({ 'products.product': review.product, user: req.user.id });
+        if (!order) {
             return res.status(403).send({ error: 'Unauthorized' });
         }
 
@@ -118,8 +126,14 @@ router.delete('/review/:id', authenticateUser, async (req, res) => {
             return res.status(404).send({ error: 'Review not found' });
         }
 
-        // Ensure the review belongs to the user
+        // Check if the review belongs to the user
         if (review.user.toString() !== req.user.id) {
+            return res.status(403).send({ error: 'Unauthorized' });
+        }
+
+        // Ensure the review belongs to an order of the user
+        const order = await Order.findOne({ 'products.product': review.product, user: req.user.id });
+        if (!order) {
             return res.status(403).send({ error: 'Unauthorized' });
         }
 

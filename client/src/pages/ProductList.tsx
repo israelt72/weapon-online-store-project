@@ -4,6 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts, selectProducts, selectProductStatus } from '../redux/productSlice';
 import ProductCard from '../components/ProductCard';
 import { AppDispatch } from '../app/appStore';
+import Pagination from '../components/Pagination';
+
+// Constants for card dimensions
+const CARD_WIDTH = 322; 
+const CARD_HEIGHT = 430; 
+const GUTTER = 16; 
 
 const ProductList: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -11,13 +17,38 @@ const ProductList: React.FC = () => {
   const status = useSelector(selectProductStatus);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 14;
+  const [itemsPerPage, setItemsPerPage] = useState(14); // Default value
 
   useEffect(() => {
     if (status === 'idle') {
       dispatch(fetchProducts());
     }
   }, [dispatch, status]);
+
+  useEffect(() => {
+    const updateItemsPerPage = () => {
+      const windowWidth = window.innerWidth;
+
+      // Check if the screen width is less than 360px
+      if (windowWidth < 360) {
+        setItemsPerPage(1); // Set to 1 card for small screens
+      } else {
+        // Calculate how many cards fit per row and how many rows fit in the viewport
+        const cardsPerRow = Math.floor((windowWidth - GUTTER) / (CARD_WIDTH + GUTTER));
+        const rowsPerPage = Math.floor(window.innerHeight / (CARD_HEIGHT + GUTTER));
+        setItemsPerPage(cardsPerRow * rowsPerPage);
+      }
+    };
+
+    updateItemsPerPage(); // Initial call
+    window.addEventListener('resize', updateItemsPerPage);
+
+    return () => window.removeEventListener('resize', updateItemsPerPage);
+  }, []);
+
+  useEffect(() => {
+    setCurrentPage(1); // Reset to first page when itemsPerPage changes
+  }, [itemsPerPage]);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -28,42 +59,27 @@ const ProductList: React.FC = () => {
   const totalPages = Math.ceil(products.length / itemsPerPage);
 
   return (
-    <div className="product-list">
-      {status === 'loading' && <div>Loading...</div>}
-      {status === 'failed' && <div>Error fetching products</div>}
-      {status === 'succeeded' && (
-        <>
-          <h2>Products</h2>
-          <div className="products">
-            {currentProducts.map((product) => (
-              <ProductCard key={product._id} product={product} />
-            ))}
-          </div>
-          <div className="pagination">
-            <button 
-              onClick={() => paginate(currentPage - 1)} 
-              disabled={currentPage === 1}
-            >
-              &lt; Previous
-            </button>
-            {Array.from({ length: totalPages }, (_, index) => (
-              <button
-                key={`page-${index + 1}`} // Unique key for each button
-                onClick={() => paginate(index + 1)}
-                className={currentPage === index + 1 ? 'active' : ''}
-              >
-                {index + 1}
-              </button>
-            ))}
-            <button 
-              onClick={() => paginate(currentPage + 1)} 
-              disabled={currentPage === totalPages}
-            >
-              Next &gt;
-            </button>
-          </div>
-        </>
-      )}
+    <div className="product-list-container">
+      <div className="product-list">
+        {status === 'loading' && <div>Loading...</div>}
+        {status === 'failed' && <div>Error fetching products</div>}
+        {status === 'succeeded' && (
+          <>
+            <div className="products">
+              {currentProducts.map((product) => (
+                <ProductCard key={product._id} product={product} />
+              ))}
+            </div>
+            <div className="pagination">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                paginate={paginate}
+              />
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
 };

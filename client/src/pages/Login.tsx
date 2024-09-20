@@ -2,18 +2,18 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { loginUser, selectUserError } from '../redux/userSlice';
+import { loginUser, selectError, selectStatus } from '../redux/userSlice';
 import { AppDispatch, RootState } from '../app/appStore';
-import '../components/styles.css';
-
+// import '../components/styles.css';
+import'./login.css';
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
-  const status = useSelector((state: RootState) => state.user.status);
-  const userError = useSelector(selectUserError);
+  const status = useSelector((state: RootState) => selectStatus(state));
+  const userError = useSelector((state: RootState) => selectError(state));
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -85,7 +85,7 @@ const Login: React.FC = () => {
               autoComplete="current-password"
             />
           </div>
-          <button type="submit" disabled={status === 'loading'}>
+          <button className='button-login' type="submit" disabled={status === 'loading'}>
             {status === 'loading' ? 'Logging in...' : 'Login'}
           </button>
           {error && <div className="error-message">{error}</div>}

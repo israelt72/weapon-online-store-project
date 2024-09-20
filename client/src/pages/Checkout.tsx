@@ -1,68 +1,78 @@
-// src/pages/Checkout.tsx
-
+// Checkout.tsx
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { clearCart, selectCartItems, selectCartTotal } from '../redux/cartSlice';
+import { clearCart, selectCartItems } from '../redux/cartSlice';
 import { placeOrder } from '../redux/orderSlice';
 import { calculateTotalPrice } from '../utils/helpers';
+import { fetchProducts, updateStockAfterOrder } from '../redux/productSlice';
 import '../components/styles.css';
-import { AppDispatch } from '../app/appStore';
-import { Product } from '../redux/productSlice';
+import { AppDispatch, RootState } from '../app/appStore';
 
 const Checkout: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
   const cartItems = useSelector(selectCartItems);
-  const cartTotal = useSelector(selectCartTotal);
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const userId = useSelector((state: RootState) => state.user.user?.id);
 
-  // Handle placing the order
+  useEffect(() => {
+    if (!userId) {
+      navigate('/login'); // אם המשתמש לא מחובר, העבר אותו לדף ההתחברות
+    }
+    if (cartItems.length === 0) {
+      navigate('/cart'); // אם העגלה ריקה, העבר לדף העגלה
+    }
+  }, [userId, cartItems, navigate]);
+
   const handlePlaceOrder = async () => {
     setIsPlacingOrder(true);
-
-    // Retrieve token from sessionStorage
     const token = sessionStorage.getItem('access_token');
-    console.log('Token from sessionStorage:', token); // Log token for debugging
 
     if (!token) {
-      console.error('Token not found in sessionStorage');
       setError('Failed to place order. Please try again.');
       setIsPlacingOrder(false);
       return;
     }
 
+    if (!userId) {
+      setError('User ID is missing.');
+      setIsPlacingOrder(false);
+      return;
+    }
+
     try {
-      // Dispatch placeOrder action
-      await dispatch(placeOrder({
-        userId: 'user-id', // Replace with actual user ID
+      const orderResponse = await dispatch(placeOrder({
+        _id: 'temporaryId',
+        user: userId,
         items: cartItems.map(item => ({
-          product: item.product, // Send the full product object
+          product: item.product,
           quantity: item.quantity,
         })),
-        totalAmount: cartTotal,
+        products: cartItems.map(item => item.product),
+        total: calculateTotalPrice(cartItems),
         createdAt: new Date().toISOString(),
         status: 'pending',
       })).unwrap();
-      
-      // Clear cart and navigate to order confirmation
+
+      // עדכון המלאי של המוצרים
+      await Promise.all(cartItems.map(item => 
+        dispatch(updateStockAfterOrder({
+          id: item.product._id,
+          quantity: item.quantity,
+        }))
+      ));
+
       dispatch(clearCart());
-      navigate('/order-confirmation');
-    } catch (err) {
-      console.error('Failed to place order:', err);
+      await dispatch(fetchProducts()); 
+      navigate('/products'); 
+    } catch (err: any) {
       setError('Failed to place order. Please try again.');
     } finally {
       setIsPlacingOrder(false);
     }
   };
-
-  // Redirect to cart if cart is empty
-  useEffect(() => {
-    if (cartItems.length === 0) {
-      navigate('/cart');
-    }
-  }, [cartItems, navigate]);
 
   return (
     <div className="checkout">

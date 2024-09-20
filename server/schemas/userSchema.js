@@ -29,6 +29,7 @@ const userSchema = new Schema({
     default: 'user',
     // immutable: true, // Ensure the role cannot be changed after creation
   },
+  
   orders: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Order',

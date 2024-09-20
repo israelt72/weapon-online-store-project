@@ -1,0 +1,30 @@
+.rating-stars {
+    display: flex;
+    direction: row;
+     
+  }
+  
+  .star {
+    font-size: 24px;
+    color: gray; 
+  }
+  
+  .star.full {
+    color: rgb(200, 200, 2); 
+  }
+  
+  .star.half {
+    color: rgb(200, 200, 2);
+    position: relative;
+    display: inline-block;
+  }
+  
+  .star.half::after {
+    content: '\2605'; 
+    position: absolute;
+    left: 0;
+    width: 50%;
+    overflow: hidden;
+    color: rgb(200, 200, 2); 
+  }
+  

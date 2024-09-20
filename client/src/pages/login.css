@@ -1,0 +1,33 @@
+
+
+.auth-container {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    /* background-color: #f0f0f0; */
+    
+}
+  
+  .auth-form {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: white;
+    padding:2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 300px;
+    width: 100%; 
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+    
+  }
+  
+  .error-message {
+    color: red;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+  }
+  

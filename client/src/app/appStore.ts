@@ -1,16 +1,12 @@
+// src/app/appStore.ts
 
-
-
-
-// export default store;
-
-import { configureStore } from '@reduxjs/toolkit';
+import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
 import userReducer from '../redux/userSlice';
 import cartReducer from '../redux/cartSlice';
 import productsReducer from '../redux/productSlice';
 import ordersReducer from '../redux/orderSlice';
-import { ThunkAction } from 'redux-thunk';
-import { Action } from 'redux';
+import soundReducer from '../redux/soundSlice'; // Import sound reducer
+import reviewReducer from '../redux/reviewSlice'; // Import review reducer
 
 // Configure the Redux store
 const store = configureStore({
@@ -19,6 +15,8 @@ const store = configureStore({
     products: productsReducer,
     cart: cartReducer,
     orders: ordersReducer,
+    sound: soundReducer, 
+    reviews: reviewReducer, 
   },
   // Uncomment this line if you want Redux DevTools in development
   //  devTools: process.env.NODE_ENV !== 'production',

@@ -1,8 +1,8 @@
-// components/Register.tsx
+// src/components/Register.tsx
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../app/appStore';
-import { registerUser, selectUserError, selectUserStatus } from '../redux/userSlice';
+import { registerUser, selectError, selectStatus } from '../redux/userSlice';
 import { useNavigate } from 'react-router-dom';
 import '../components/styles.css';
 
@@ -15,8 +15,8 @@ const Register: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
-  const status = useSelector((state: RootState) => state.user.status); // Get registration status
-  const userError = useSelector(selectUserError); // Get user error
+  const status = useSelector((state: RootState) => selectStatus(state));
+  const userError = useSelector((state: RootState) => selectError(state));
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -27,7 +27,7 @@ const Register: React.FC = () => {
     }
 
     console.log('Attempting to register with:', { email, firstName, lastName }); // Log registration details
-    const resultAction = await dispatch(registerUser({ email, password, firstName, lastName }));
+    const resultAction = await dispatch(registerUser({ email, password, firstName, lastName   }));
 
     if (registerUser.fulfilled.match(resultAction)) {
       console.log('Registration successful:', resultAction.payload); // Log success payload
@@ -93,7 +93,9 @@ const Register: React.FC = () => {
               required
             />
           </div>
-          <button type="submit">Register</button>
+          <button type="submit" disabled={status === 'loading'}>
+            {status === 'loading' ? 'Registering...' : 'Register'}
+          </button>
           {error && <div className="error-message">{error}</div>} {/* Display error message */}
           {status === 'loading' && <p>Loading...</p>} {/* Display loading state */}
         </form>

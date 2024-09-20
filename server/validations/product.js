@@ -1,12 +1,7 @@
-
 //product.js
 import Joi from 'joi';
 
-/**
- * Validate the creation of a product
- * @param {Object} productInfo - The product data to validate
- * @returns {Object} - The result of the validation
- */
+
 export const createProductValidation = (productInfo) => {
     const schema = Joi.object({
         name: Joi.string().min(3).max(255).required(),
@@ -17,20 +12,18 @@ export const createProductValidation = (productInfo) => {
         stock: Joi.number().integer().min(0).required(),
         reviews: Joi.array().items(
             Joi.object({
+                _id: Joi.string().optional(),
                 user: Joi.string().required(),
                 rating: Joi.number().min(1).max(5).required(),
                 comment: Joi.string().max(1000).optional()
             })
-        ).optional()
+        ).optional(),
+        createdAt: Joi.date().optional()  
     });
     return schema.validate(productInfo);
 };
 
-/**
- * Validate the update of a product
- * @param {Object} productInfo - The product update data to validate
- * @returns {Object} - The result of the validation
- */
+
 export const updateProductValidation = (productInfo) => {
     const schema = Joi.object({
         name: Joi.string().min(3).max(255).optional(),
@@ -41,11 +34,13 @@ export const updateProductValidation = (productInfo) => {
         stock: Joi.number().integer().min(0).optional(),
         reviews: Joi.array().items(
             Joi.object({
+                _id: Joi.string().optional(),
                 user: Joi.string().optional(),
                 rating: Joi.number().min(1).max(5).optional(),
                 comment: Joi.string().max(1000).optional()
             })
-        ).optional()
+        ).optional(),
+        createdAt: Joi.date().optional() 
     });
     return schema.validate(productInfo);
 };

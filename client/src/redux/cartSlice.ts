@@ -1,5 +1,5 @@
-
 // src/redux/cartSlice.ts
+
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Product } from './productSlice';
 
@@ -44,7 +44,7 @@ const cartSlice = createSlice({
       // Clear cart from localStorage
       localStorage.removeItem('cart');
     },
-    updateQuantity(state, action: PayloadAction<{ productId: string, quantity: number }>) {
+    updateQuantity(state, action: PayloadAction<{ productId: string; quantity: number }>) {
       const existingItem = state.items.find(item => item.product._id === action.payload.productId);
       if (existingItem) {
         existingItem.quantity = action.payload.quantity;

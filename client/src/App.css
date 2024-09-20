@@ -1,145 +1,59 @@
 /* App.css */
 
-/* Ensure the entire height is utilized */
+
 html, body {
   height: 100%;
   margin: 0;
+  
 }
 
 #root {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  
 }
 
 .app-container {
   display: flex;
   flex-direction: column;
   flex: 1;
+ 
+
 }
 
 .content {
   flex: 1;
 }
 
-/* Footer styles */
-.footer {
-  background-color: #343a40; /* Dark background color */
-  color: #f8f9fa; /* Light text color */
-  padding: 2rem 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-top: 1px solid #e0e0e0; /* Subtle border on top */
-  margin-top: auto; /* Ensure footer stays at the bottom */
-}
-
-.footer-content {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 1200px;
-  margin-bottom: 1rem;
-}
-
-.footer-left,
-.footer-middle,
-.footer-right {
-  flex: 1;
-  padding: 0 1rem;
-}
-
-.footer-left h4,
-.footer-middle h4,
-.footer-right h4 {
-  font-size: 1.2rem;
-  margin-bottom: 0.5rem;
-  font-weight: bold;
-}
-
-.footer-left p,
-.footer-middle ul,
-.footer-right p {
-  font-size: 0.9rem;
-}
-
-.footer-middle ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.footer-middle ul li {
-  margin-bottom: 0.5rem;
-}
-
-.footer-middle ul li a {
-  color: #f8f9fa;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.footer-middle ul li a:hover {
-  color: #007bff; /* Highlight color on hover */
-  text-decoration: underline;
-}
-
-.footer-bottom {
-  text-align: center;
-}
-
-.footer-bottom p {
-  font-size: 0.8rem;
-  margin: 0;
-  padding: 1rem 0;
-  border-top: 1px solid #e0e0e0;
-}
-
-@media (max-width: 768px) {
-  .footer-content {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .footer-left,
-  .footer-middle,
-  .footer-right {
-    padding: 0;
-    margin-bottom: 1rem;
-  }
-
-  .footer-middle ul {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .footer-middle ul li {
-    margin-bottom: 0.2rem;
-  }
-}
 
 /* Auth page styles */
-.auth-container {
+
+ .auth-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex: 1; /* Allow the container to grow to fill available space */
+  flex: 1; 
   padding: 20px;
-  background-color: #f4f4f4;
-}
+  background-color: #ffffff;
+  height: 60vh
+} 
 
 .auth-form {
   background: #ffffff;
   padding: 30px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 400px;
+  max-width: 300px;
   width: 100%;
   box-sizing: border-box;
+  background: radial-gradient(circle, #f7f8f8, #e2e2e2);
+    color: #333;
+    padding: 20px;
+    text-align: center;
 }
 
-.auth-form h2 {
+ .auth-form h2 {
   margin-bottom: 20px;
   font-size: 28px;
   color: #333;
@@ -166,6 +80,7 @@ html, body {
   box-sizing: border-box;
   font-size: 16px;
   transition: border-color 0.3s ease;
+  
 }
 
 .auth-form input[type="text"]:focus,
@@ -213,4 +128,4 @@ html, body {
   margin-top: -40px;
   font-size: 30px;
 
-}
+} 

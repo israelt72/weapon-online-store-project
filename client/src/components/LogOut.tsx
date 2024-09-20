@@ -1,5 +1,4 @@
 //LogOut.tsx
-
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -12,6 +11,7 @@ const Logout: React.FC = () => {
 
   const handleLogout = () => {
     dispatch(logoutUser());
+    sessionStorage.removeItem('access_token'); // Remove token from sessionStorage
     navigate('/'); // Navigate to home after logout
   };
 

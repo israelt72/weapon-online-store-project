@@ -16,15 +16,23 @@ const handleError = (res, error, message = 'Server error') => {
 // Register
 router.post('/register', async (req, res) => {
   const { firstName, lastName, email, password, role } = req.body;
+  
+  console.log('Register request body:', req.body);
 
   // Validate request data
   const { error } = registerValidation({ firstName, lastName, email, password });
-  if (error) return res.status(400).send({ error: error.details[0].message });
+  if (error) {
+    console.log('Register validation error:', error.details[0].message);
+    return res.status(400).send({ error: error.details[0].message });
+  }
 
   try {
     // Check if user already exists
     let user = await User.findOne({ email });
-    if (user) return res.status(400).send({ error: 'User already exists' });
+    if (user) {
+      console.log('User already exists:', email);
+      return res.status(400).send({ error: 'User already exists' });
+    }
 
     // Create new user
     user = new User({ firstName, lastName, email, password, role });
@@ -34,20 +42,17 @@ router.post('/register', async (req, res) => {
 
     // Save user to the database
     await user.save();
+    console.log('User registered successfully:', user);
 
-    // Generate JWT token including the role
-    const token = generateToken(user._id.toString(), user.role);
-
-    // Send token in the response body
+    // Send response
     return res.status(201).send({
-      msg: 'User registered',
-      token,
+      msg: 'User registered successfully',
       user: {
         id: user._id,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        role: user.role // Include the role in the response
+        role: user.role
       }
     });
   } catch (err) {
@@ -58,22 +63,34 @@ router.post('/register', async (req, res) => {
 // Login
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
+  
+  console.log('Login request body:', req.body);
 
   // Validate request data
   const { error } = loginValidation({ email, password });
-  if (error) return res.status(400).send({ error: error.details[0].message });
+  if (error) {
+    console.log('Login validation error:', error.details[0].message);
+    return res.status(400).send({ error: error.details[0].message });
+  }
 
   try {
     const user = await User.findOne({ email });
-    if (!user) return res.status(400).send({ error: 'Invalid credentials' });
+    if (!user) {
+      console.log('User not found:', email);
+      return res.status(400).send({ error: 'Invalid credentials' });
+    }
 
     const isMatch = await comparePasswords(password, user.password);
-    if (!isMatch) return res.status(400).send({ error: 'Invalid credentials' });
+    if (!isMatch) {
+      console.log('Invalid password for user:', email);
+      return res.status(400).send({ error: 'Invalid credentials' });
+    }
 
-    // Generate JWT token including the role
+    // Generate JWT token
     const token = generateToken(user._id.toString(), user.role);
+    console.log('Generated token for user:', user.email);
 
-    // Send token in the response body
+    // Send response
     return res.status(200).send({
       msg: 'User logged in',
       token,
@@ -82,7 +99,7 @@ router.post('/login', async (req, res) => {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        role: user.role // Include the role in the response
+        role: user.role
       }
     });
   } catch (err) {
@@ -93,8 +110,12 @@ router.post('/login', async (req, res) => {
 // Get Profile
 router.get('/profile', authenticateUser, async (req, res) => {
   try {
+    console.log('Get Profile request for user ID:', req.user.id);
     const foundUser = await User.findById(req.user.id).select('-password');
-    if (!foundUser) return res.status(404).send({ error: 'User not found' });
+    if (!foundUser) {
+      console.log('User not found:', req.user.id);
+      return res.status(404).send({ error: 'User not found' });
+    }
 
     res.status(200).send(foundUser);
   } catch (error) {
@@ -106,13 +127,20 @@ router.get('/profile', authenticateUser, async (req, res) => {
 router.put('/profile', authenticateUser, async (req, res) => {
   // Validate request data
   const { error } = updateUserValidation(req.body);
-  if (error) return res.status(400).send({ error: error.details[0].message });
+  if (error) {
+    console.log('Update Profile validation error:', error.details[0].message);
+    return res.status(400).send({ error: error.details[0].message });
+  }
 
   const { firstName, lastName, email, password } = req.body;
 
   try {
+    console.log('Update Profile request for user ID:', req.user.id);
     const user = await User.findById(req.user.id);
-    if (!user) return res.status(404).send({ error: 'User not found' });
+    if (!user) {
+      console.log('User not found for update:', req.user.id);
+      return res.status(404).send({ error: 'User not found' });
+    }
 
     // Update user details
     user.firstName = firstName || user.firstName;
@@ -123,10 +151,54 @@ router.put('/profile', authenticateUser, async (req, res) => {
     if (password) user.password = await hashPassword(password);
 
     await user.save();
+    console.log('Profile updated for user ID:', req.user.id);
 
     res.status(200).send({ msg: 'Profile updated', user });
   } catch (error) {
     handleError(res, error, 'Update Profile error');
+  }
+});
+
+// Get all users
+router.get('/', authenticateUser, async (req, res) => {
+  try {
+    console.log('Get all users request');
+    const users = await User.find();//.select('-password');
+    res.status(200).send(users);
+  } catch (error) {
+    handleError(res, error, 'Get Users error');
+  }
+});
+
+// Get user by ID
+router.get('/:id', authenticateUser, async (req, res) => {
+  const { id } = req.params;
+  try {
+    console.log('Get user by ID request:', id);
+    const user = await User.findById(id).select('-password');
+    if (!user) {
+      console.log('User not found:', id);
+      return res.status(404).send({ error: 'User not found' });
+    }
+    res.status(200).send(user);
+  } catch (error) {
+    handleError(res, error, 'Get User by ID error');
+  }
+});
+
+// Delete user
+router.delete('/:id', authenticateUser, async (req, res) => {
+  const { id } = req.params;
+  try {
+    console.log('Delete user request for ID:', id);
+    const user = await User.findByIdAndDelete(id);
+    if (!user) {
+      console.log('User not found:', id);
+      return res.status(404).send({ error: 'User not found' });
+    }
+    res.status(200).send({ msg: 'User deleted successfully' });
+  } catch (error) {
+    handleError(res, error, 'Delete User error');
   }
 });
 

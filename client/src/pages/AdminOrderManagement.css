@@ -1,0 +1,187 @@
+/* src/components/AdminOrderManagement.css */
+.admin-order-management {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; 
+    text-align: left;
+    flex-wrap: wrap;
+    padding: 15px;
+    background-color: #f9f9f9;
+    gap: 15px;
+}
+
+.order-preview-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.order-preview {
+   min-width: 250px;
+   max-width:260px ;
+    flex: 1 1 calc(14.28% - 15px); /* 100% / 7 */
+    max-width: calc(14.28% - 15px); /* 100% / 7 */
+    border-radius: 8px;
+    background: #89a5b6;
+    padding: 15px;
+    box-sizing: border-box; /* Makes sure padding is included in width */
+    overflow: hidden; /* Prevents text overflow */
+}
+
+.order-preview h4 {
+    white-space: nowrap; /* Prevents text from wrapping */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Adds "..." for overflowing text */
+}
+
+.order-item {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    transition: transform 0.2s ease;
+}
+
+.order-item:hover {
+    transform: translateY(-2px);
+}
+
+.order-item h3 {
+    margin-top: 0;
+    font-size: 1.25em;
+    color: #333;
+}
+
+.order-buttons {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+.order-buttons button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.order-buttons button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.order-edit-form {
+    margin: 0 auto;
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 300px;
+}
+
+.order-edit-form h3 {
+    margin-top: 0;
+    font-size: 1.25em;
+    color: #333;
+}
+
+.product-order-image {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    display: block;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+input, select {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: calc(100% - 20px);
+    box-sizing: border-box;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.edit-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.edit-buttons button {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.edit-buttons button:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+.edit-buttons .back-button {
+    background-color: #6c757d;
+}
+
+.edit-buttons .back-button:hover {
+    background-color: #5a6268;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .order-preview {
+        flex: 1 1 calc(30% - 15px); /* 3 items in a row */
+        max-width: calc(30% - 15px);
+    }
+}
+
+@media (max-width: 480px) {
+    .order-preview {
+        flex: 1 1 100%; /* 1 item in a row */
+        /* max-width: 100%; */
+    }
+
+    .order-item, .order-edit-form {
+        padding: 15px; 
+    }
+
+    .order-buttons button, .edit-buttons button {
+        padding: 8px 16px;
+        font-size: 0.875rem; 
+    }
+}

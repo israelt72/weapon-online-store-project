@@ -1,0 +1,164 @@
+/* AdminUserManagement */
+.admin-order-management {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
+    background-color: #f9f9f9;
+    gap: 15px;
+}
+.order-selection{
+display: flex;
+flex-direction: row;
+justify-content: center;
+flex-wrap: wrap;
+gap:15px;
+}
+
+.order-item {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 800px; 
+    height: auto; 
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+}
+
+.order-item h3 {
+    margin-top: 0;
+    font-size: 1.25em;
+}
+
+.order-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: auto; 
+}
+
+.order-buttons button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.user-buttons{
+   display: flex;
+   gap: 15px;
+   justify-content: center;
+   align-items: center;
+  
+}
+.order-buttons button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.order-edit-form {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: calc(100% - 30px);
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.order-edit-form h3 {
+    margin-top: 0;
+    font-size: 1.25em;
+}
+
+.product-order-image {
+    width: 300px;
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+input, select {
+    margin-top: 5px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: calc(100% - 20px);
+    box-sizing: border-box;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.edit-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.edit-buttons button {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.edit-buttons button:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+.edit-buttons .back-button {
+    background-color: #6c757d;
+}
+
+.edit-buttons .back-button:hover {
+    background-color: #5a6268;
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+    .order-item {
+        width: 100%;
+        max-width: 500px;
+    }
+}
+
+@media (max-width: 768px) {
+    .order-item {
+        width: 100%;
+        max-width: 400px;
+    }
+}
+
+@media (max-width: 480px) {
+    .order-item {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .order-buttons button, .edit-buttons button {
+        padding: 8px 16px;
+        font-size: 0.875rem;
+    }
+}

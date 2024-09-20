@@ -6,9 +6,9 @@ import mongoose from 'mongoose';
 import userRoutes from './routes/userRoutes.js';
 import productRoutes from './routes/productRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
-import reviewRoutes from './routes/reviewRoutes.js';
+import authRoutes from './routes/authRoutes.js';
+import { authenticateUser, isAdmin } from './middleware/auth.js'; 
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
-import { authenticateUser } from './middleware/auth.js'; // ייבוא של ה-Middleware
 
 dotenv.config();
 
@@ -16,6 +16,7 @@ const app = express();
 
 app.use(express.json());
 
+// Set up CORS to allow requests from your frontend origin
 app.use(cors({
     origin: 'http://localhost:3001',
 }));
@@ -30,22 +31,24 @@ mongoose.connect(mongoDbUrl)
         console.error('MongoDB connection failed!', error);
     });
 
+    app.use('/api/products', productRoutes);
+// Apply authentication middleware before defining routes that require authentication
+app.use(authenticateUser);
+
 // Define routes
-const userRouter = express.Router();
-userRouter.post('/login', userRoutes); // Route for login without authentication
-userRouter.use(authenticateUser); // Apply authentication middleware to other user routes
-userRouter.use(userRoutes); // All other user routes that need authentication
+app.use('/api/auth', authRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/users', userRoutes);
 
-app.use('/api/users', userRouter); // Apply the combined router for users
+// Apply admin middleware for specific routes if needed
+app.use('/api/admin', isAdmin); // Apply admin check to /api/admin routes
 
-app.use('/api/products', authenticateUser, productRoutes);
-app.use('/api/orders', authenticateUser, orderRoutes);
-app.use('/api/reviews', authenticateUser, reviewRoutes);
-
+// Define a catch-all route for non-existing endpoints
 app.get('/', (req, res) => {
     res.send('API is running...');
 });
 
+// Use error handling middleware
 app.use(notFound);
 app.use(errorHandler);
 

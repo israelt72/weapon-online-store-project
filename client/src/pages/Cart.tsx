@@ -14,7 +14,7 @@ const Cart: React.FC = () => {
   const navigate = useNavigate();
   const userId = useSelector((state: RootState) => state.user.user?.id);
 
-  // פונקציה לקבלת הטוקן מה-sessionStorage
+  // Function to get the token from sessionStorage
   const getToken = () => sessionStorage.getItem('access_token');
 
   // Handle changing the quantity of an item
@@ -37,7 +37,7 @@ const Cart: React.FC = () => {
   const handlePlaceOrder = async () => {
     if (!userId) {
       console.error('User is not logged in');
-      navigate('/login'); // הפנה את המשתמש להתחברות אם הוא לא מחובר
+      navigate('/login'); // Redirect to login if not logged in
       return;
     }
 
@@ -48,26 +48,31 @@ const Cart: React.FC = () => {
       return;
     }
 
+    // Ensure all fields are correct and in the right format
     const order = {
-      userId,
-      items: cartItems.map(item => ({
-        product: item.product._id, // השתמש בשם החדש עבור המזהה
-        quantity: item.quantity,
+      user: userId, // Ensure this matches your schema
+      products: cartItems.map(item => ({
+        product: item.product._id, // Use `product` as per your schema
+        quantity: Number(item.quantity), // Ensure quantity is a number
       })),
-      totalAmount: calculateTotalPrice(cartItems), // השתמש בשם הנכון עבור הסכום הכולל
-      createdAt: new Date().toISOString(),
-      status: 'pending',
+      total: Number(calculateTotalPrice(cartItems)), // Ensure total is a number
+      status: 'pending', // Default status
     };
 
     try {
       const response = await axios.post('http://localhost:3000/api/orders', order, {
         headers: {
-          Authorization: `Bearer ${token}`, // הוסף את הטוקן בכותרת
-          'Content-Type': 'application/json', // הקצה את סוג התוכן ל-JSON
+          Authorization: `Bearer ${token}`, 
+          'Content-Type': 'application/json',
         },
       });
-      dispatch(clearCart());
-      navigate('/order-confirmation');
+
+      if (response.status === 201) { 
+        dispatch(clearCart());
+        navigate('/products');
+      } else {
+        console.error('Failed to place order:', response.statusText);
+      }
     } catch (error: any) {
       console.error('Failed to place order', error.response?.data || error.message);
     }
@@ -96,12 +101,15 @@ const Cart: React.FC = () => {
               />
               <div className="cart-item-details">
                 <div className="cart-item-name">{item.product.name}</div>
-                <div className="cart-item-price">${item.product.price.toFixed(2)}</div>
-                <div className="cart-item-stock">Stock: {item.product.stock}</div>
+                <div className="cart-item-price">${Number(item.product.price).toFixed(2)}</div>
+                <div className={`cart-item-stock ${item.product.stock === 0 ? 'out-of-stock' : ''}`}>
+                  {item.product.stock > 0 ? `Stock: ${item.product.stock}` : 'Out of stock'}
+                </div>
                 <div className="cart-item-quantity">
                   <button 
                     onClick={() => handleQuantityChange(item.product._id, item.quantity - 1, item.product.stock)}
                     disabled={item.quantity <= 1} 
+                    className="quantity-button"
                   >
                     -
                   </button>
@@ -109,6 +117,7 @@ const Cart: React.FC = () => {
                   <button 
                     onClick={() => handleQuantityChange(item.product._id, item.quantity + 1, item.product.stock)}
                     disabled={item.quantity >= item.product.stock} 
+                    className="quantity-button"
                   >
                     +
                   </button>
@@ -123,7 +132,7 @@ const Cart: React.FC = () => {
       </div>
       <div className="cart-summary">
         <h3>Summary</h3>
-        <div className="cart-total">Total: ${calculateTotalPrice(cartItems).toFixed(2)}</div>
+        <div className="cart-total">Total: ${Number(calculateTotalPrice(cartItems)).toFixed(2)}</div>
         <button className="checkout-button" onClick={handlePlaceOrder}>Proceed to Checkout</button>
       </div>
       <button className="back-to-products-button" onClick={() => navigate('/products')}>

@@ -3,12 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts, selectProducts, updateProduct, deleteProduct, createProduct, Review } from '../redux/productSlice';
 import { RootState, AppDispatch } from '../app/appStore';
-
 import AdminOrderManagement from '../pages/AdminOrderManagement';
 import Pagination from '../components/Pagination'; 
 import '../pages/AdminDashboard.css';
-import AdminUserManagement from './UserManagement';
-
+import AdminUserManagement from '../pages/AdminUserManagement';
 
 // Define types for product and form data
 interface Product {
@@ -102,7 +100,7 @@ const AdminDashboard: React.FC = () => {
                 category: updatedProduct.category,
                 image: updatedProduct.image,
                 stock: Number(updatedProduct.stock),
-                reviews: selectedProduct.reviews // Maintain existing reviews
+                reviews: selectedProduct.reviews 
             };
             dispatch(updateProduct({ id: selectedProduct._id, data: updatedData }))
                 .catch((error) => {

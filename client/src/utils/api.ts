@@ -18,7 +18,7 @@ api.interceptors.request.use(
     console.log('Retrieved token from storage:', token);
 
     // Check if the request requires authorization
-    const requiresAuth = ['/api/admin','/api/users', '/api/products', '/api/orders'].some((path) => config.url?.includes(path));
+    const requiresAuth = ['/admin','/users', '/products', '/orders'].some((path) => config.url?.includes(path));
 
     if (requiresAuth && token) {
       config.headers['Authorization'] = `Bearer ${token}`;

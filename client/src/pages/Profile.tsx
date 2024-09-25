@@ -1,4 +1,5 @@
 //Profile.tsx
+// Profile.tsx
 import React, { useEffect, useState } from 'react';
 import { useForm, FieldError } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
@@ -91,7 +92,7 @@ const Profile: React.FC = () => {
 
     try {
       await fetch(`/api/products/${productId}/reviews`, {
-        method: 'POST',
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
@@ -115,7 +116,7 @@ const Profile: React.FC = () => {
 
     try {
       await fetch(`/api/products/${editNote.productId}/reviews/${editNote.reviewId}`, {
-        method: 'PUT',
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
@@ -162,46 +163,46 @@ const Profile: React.FC = () => {
           <form onSubmit={handleSubmit(onSubmit)} className="profile-form">
             <div className="profile-form-group">
               <label htmlFor="firstName" className="profile-label">First Name</label>
-              <input 
-                id="firstName" 
-                className="profile-input" 
-                {...register('firstName', { required: 'First Name is required' })} 
+              <input
+                id="firstName"
+                className="profile-input"
+                {...register('firstName', { required: 'First Name is required' })}
               />
               {errors.firstName && <p className="profile-error-message">{(errors.firstName as FieldError).message}</p>}
             </div>
 
             <div className="profile-form-group">
               <label htmlFor="lastName" className="profile-label">Last Name</label>
-              <input 
-                id="lastName" 
-                className="profile-input" 
-                {...register('lastName', { required: 'Last Name is required' })} 
+              <input
+                id="lastName"
+                className="profile-input"
+                {...register('lastName', { required: 'Last Name is required' })}
               />
               {errors.lastName && <p className="profile-error-message">{(errors.lastName as FieldError).message}</p>}
             </div>
 
             <div className="profile-form-group">
               <label htmlFor="email" className="profile-label">Email</label>
-              <input 
-                id="email" 
-                className="profile-input" 
-                {...register('email', { 
-                  required: 'Email is required', 
-                  pattern: { value: /^[^@ ]+@[^@ ]+\.[^@ .]{2,}$/, message: 'Email is not valid' } 
-                })} 
+              <input
+                id="email"
+                className="profile-input"
+                {...register('email', {
+                  required: 'Email is required',
+                  pattern: { value: /^[^@ ]+@[^@ ]+\.[^@ .]{2,}$/, message: 'Email is not valid' }
+                })}
               />
               {errors.email && <p className="profile-error-message">{(errors.email as FieldError).message}</p>}
             </div>
 
             <div className="profile-form-group">
               <label htmlFor="password" className="profile-label">Password</label>
-              <input 
-                id="password" 
+              <input
+                id="password"
                 type="password"
-                className="profile-input" 
-                {...register('password', { 
-                  minLength: { value: 6, message: 'Password must be at least 6 characters long' } 
-                })} 
+                className="profile-input"
+                {...register('password', {
+                  minLength: { value: 6, message: 'Password must be at least 6 characters long' }
+                })}
               />
               {errors.password && <p className="profile-error-message">{(errors.password as FieldError).message}</p>}
             </div>
@@ -223,6 +224,16 @@ const Profile: React.FC = () => {
             orders.map(order => (
               <div key={order._id} className="order-item-profile">
                 <p>Order ID: {order._id}</p>
+                {user ? (
+                  <p>User ID: {order.user}</p>
+                ) : (
+                  <p>User ID: Unknown</p>
+                )}
+                {user ? (
+                  <p>User: {user.firstName} {user.lastName}</p>
+                ) : (
+                  <p>User: Unknown</p>
+                )}
                 <p>Status: {order.status}</p>
                 <p>Total: ${order.total}</p>
                 <p>Created At: {new Date(order.createdAt).toLocaleDateString()}</p>

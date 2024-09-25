@@ -25,12 +25,7 @@ export const calculateTotalPrice = (products) => {
   }, 0);
 };
 
-/**
- * Function to check if an email is valid
- * @param {string} email - Email to be checked
- * @returns {boolean} Whether the email is valid or not
- * @throws {Error} If email is not a string
- */
+
 export const isValidEmail = (email) => {
   if (typeof email !== 'string') {
     throw new Error('Email should be a string');
@@ -39,12 +34,7 @@ export const isValidEmail = (email) => {
   return regex.test(email);
 };
 
-/**
- * Function to generate a random string of a given length
- * @param {number} length - Desired length of the string
- * @returns {string} Random string
- * @throws {Error} If length is not a positive number
- */
+
 export const generateRandomString = (length) => {
   if (typeof length !== 'number' || length <= 0) {
     throw new Error('Length should be a positive number');
@@ -57,13 +47,7 @@ export const generateRandomString = (length) => {
   return result;
 };
 
-/**
- * Function to create a JWT token with a payload and expiry time
- * @param {Object} payload - Data to be included in the token
- * @param {string} [expiresIn='1h'] - Token expiry time (e.g., '5h')
- * @returns {string} Created JWT token
- * @throws {Error} If TOKEN_SECRET is not defined in environment variables
- */
+
 export const createToken = (payload, expiresIn = '1h') => {
   const secret = process.env.TOKEN_SECRET;
   if (!secret) {
@@ -72,12 +56,7 @@ export const createToken = (payload, expiresIn = '1h') => {
   return jwt.sign(payload, secret, { expiresIn });
 };
 
-/**
- * Function to extract a token from the 'Authorization' header
- * @param {Object} req - Request object
- * @returns {string|null} Token from the 'Authorization' header, or null if not present
- * @throws {Error} If req is not an object
- */
+
 export const getTokenFromRequest = (req) => {
   if (!req || typeof req !== 'object') {
     throw new Error('Request object is required');
@@ -89,21 +68,12 @@ export const getTokenFromRequest = (req) => {
   return null;
 };
 
-/**
- * Function to read the environment variable for the app mode
- * @returns {string} App mode: 'production' or 'development'
- */
+
 export const getEnv = () => {
   return process.env.NODE_ENV || 'development';
 };
 
-/**
- * Function to calculate the price with tax
- * @param {number} price - Original price
- * @param {number} taxRate - Tax rate as a decimal (e.g., 0.1 for 10%)
- * @returns {number} Price including tax
- * @throws {Error} If price or taxRate are not numbers or if taxRate is not between 0 and 1
- */
+
 export const calculatePriceWithTax = (price, taxRate) => {
   if (typeof price !== 'number' || typeof taxRate !== 'number') {
     throw new Error('Price and tax rate should be numbers');
@@ -114,12 +84,7 @@ export const calculatePriceWithTax = (price, taxRate) => {
   return price + (price * taxRate);
 };
 
-/**
- * Function to convert a date to 'YYYY-MM-DD' format
- * @param {Date} date - Date to be formatted
- * @returns {string} Formatted date as 'YYYY-MM-DD'
- * @throws {Error} If date is not a Date object
- */
+
 export const formatDate = (date) => {
   if (!(date instanceof Date)) {
     throw new Error('Date should be a Date object');

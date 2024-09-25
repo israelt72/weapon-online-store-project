@@ -3,19 +3,16 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../app/appStore';
 import { fetchOrders, selectOrders, updateOrder, deleteOrder } from '../redux/orderSlice';
+import { selectProducts } from '../redux/productSlice';
 import './AdminOrderManagement.css';
 
-interface Product {
-  _id: string;
-  name: string;
-  price: number;
-  category: string;
-  image: string;
-  stock: number;
-}
-
 interface OrderProduct {
-  product: Product;
+  product: {
+    _id: string;
+    name: string;
+    image: string;
+    price: number;
+  };
   quantity: number;
 }
 
@@ -33,45 +30,58 @@ const AdminOrderManagement: React.FC = () => {
     total: 0,
     status: 'pending',
   });
+
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const orders = useSelector((state: RootState) => selectOrders(state)) as Order[];
+  const products = useSelector((state: RootState) => selectProducts(state));
   const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchOrders());
+    const loadOrders = async () => {
+      await dispatch(fetchOrders());
+    };
+    loadOrders();
   }, [dispatch]);
+
+  const getProductById = (id: string) => {
+    return products.find((product) => product._id === id) || null;
+  };
 
   const handleEditClick = (order: Order) => {
     setSelectedOrder(order);
     setOrder({
-      products: order.products,
+      products: order.products.map((p) => ({ product: p.product, quantity: p.quantity })),
       total: order.total,
       status: order.status,
     });
   };
 
-  const handleUpdateSubmit = () => {
+  const handleUpdateSubmit = async () => {
     if (selectedOrder) {
       const { _id, ...updates } = order;
 
       if (updates.products) {
-        updates.products = updates.products.map((orderProduct: OrderProduct) => ({
-          product: {
-            _id: orderProduct.product._id,
-            name: orderProduct.product.name,
-            price: orderProduct.product.price,
-            category: orderProduct.product.category,
-            image: orderProduct.product.image,
-            stock: orderProduct.product.stock,
-          },
+        updates.products = updates.products.map((orderProduct) => ({
+          product: orderProduct.product,
           quantity: orderProduct.quantity,
         }));
       }
 
-      console.log("Updating order with data:", { id: selectedOrder._id, updates });
+      try {
+        await dispatch(updateOrder({ id: selectedOrder._id, updates: updates as Partial<Order> }));
+        setSuccessMessage('The order has been updated successfully!');
+        dispatch(fetchOrders());
 
-      dispatch(updateOrder({ id: selectedOrder._id, updates: updates as Partial<Order> }));
-      setSelectedOrder(null);
+        setTimeout(() => {
+          setSuccessMessage(null);
+        }, 2500);
+
+        setSelectedOrder(null);
+      } catch (error) {
+        console.error("Error updating order:", error);
+        alert("Failed to update order.");
+      }
     }
   };
 
@@ -83,28 +93,23 @@ const AdminOrderManagement: React.FC = () => {
   const handleUpdateChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
 
-    if (name === "total") {
-      setOrder((prevOrder) => ({
-        ...prevOrder,
-        [name]: parseFloat(value),
-      }));
-    } else {
-      setOrder((prevOrder) => ({
-        ...prevOrder,
-        [name]: value,
-      }));
-    }
+    setOrder((prevOrder) => ({
+      ...prevOrder,
+      [name]: name === "total" ? parseFloat(value) : value,
+    }));
   };
 
   const handleQuantityChange = (index: number, quantity: number) => {
+    if (quantity < 1) return; // Ensure quantity is at least 1
+
     const updatedProducts = [...(order.products || [])];
-    const updatedProduct = { ...updatedProducts[index] };
-    updatedProduct.quantity = quantity;
+    updatedProducts[index].quantity = quantity;
 
-    updatedProducts[index] = updatedProduct;
+    const newTotal = updatedProducts.reduce((acc, item) => {
+      const product = getProductById(item.product._id);
+      return product ? acc + (product.price * item.quantity) : acc;
+    }, 0);
 
-    const newTotal = updatedProducts.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
-    
     setOrder({
       ...order,
       products: updatedProducts,
@@ -118,38 +123,42 @@ const AdminOrderManagement: React.FC = () => {
 
   return (
     <div className="admin-order-management">
+      {successMessage && (
+        <div className="success-message">{successMessage}</div>
+      )}
       {selectedOrder ? (
         <div className="order-item">
           <h3>Order ID: {selectedOrder._id}</h3>
           <p>User: {selectedOrder.user}</p>
           <p>Total Price: ${selectedOrder.total}</p>
           <p>Status: {selectedOrder.status}</p>
-          <div className="products-list">
+          <div className="products-list-container">
             <h4>Products</h4>
-            <div>
-              {selectedOrder.products.map((orderProduct, index) => (
-                <div className='orders-card' key={index}>
-                  <div className="product-info">
-                    <p>Product Name: {orderProduct.product.name}</p>
-                    <img src={orderProduct.product.image} alt={orderProduct.product.name} className="product-order-image" />
-                    <p>Price: ${orderProduct.product.price}</p>
+            <div className="product-list">
+              {selectedOrder.products.map((orderProduct, index) => {
+                const product = getProductById(orderProduct.product._id);
+                return product ? (
+                  <div className="order-product-card" key={index}>
+                    <div className="product-details">
+                      <p>Product Name: {product.name}</p>
+                      <p>Price: ${product.price}</p>
+                      <p>Quantity: {orderProduct.quantity}</p>
+                    </div>
+                    <label>
+                      Update Quantity:
+                      <input
+                        type="number"
+                        value={orderProduct.quantity}
+                        min="1" 
+                        onChange={(e) => handleQuantityChange(index, parseInt(e.target.value) || 1)} // Default to 1 if NaN
+                      />
+                    </label>
                   </div>
-                  <label>
-                    Quantity:
-                    <input
-                      type="number"
-                      value={orderProduct.quantity}
-                      onChange={(e) => handleQuantityChange(index, parseInt(e.target.value))}
-                    />
-                  </label>
-                </div>
-              ))}
+                ) : (
+                  <p>Product not found</p>
+                );
+              })}
             </div>
-          </div>
-          <div className="order-buttons">
-            <button onClick={handleUpdateSubmit}>Submit Changes</button>
-            <button onClick={() => handleDelete(selectedOrder._id)}>Delete</button>
-            <button onClick={handleBackClick}>Back to Orders</button>
           </div>
           <div className="order-edit-form">
             <h3>Edit Order</h3>
@@ -175,6 +184,11 @@ const AdminOrderManagement: React.FC = () => {
               </select>
             </label>
           </div>
+          <div className="order-buttons">
+            <button onClick={handleUpdateSubmit}>Submit Changes</button>
+            <button onClick={() => handleDelete(selectedOrder._id)}>Delete</button>
+            <button onClick={handleBackClick}>Back to Orders</button>
+          </div>
         </div>
       ) : (
         <div className="order-selection">
@@ -186,7 +200,7 @@ const AdminOrderManagement: React.FC = () => {
               {orders.map((order) => (
                 <div key={order._id} className="order-preview">
                   <h4>Order ID: {order._id}</h4>
-                  <button onClick={() => handleEditClick(order)}>Manage</button>
+                  <button className='btn-manage' onClick={() => handleEditClick(order)}>Manage</button>
                 </div>
               ))}
             </div>
@@ -195,6 +209,6 @@ const AdminOrderManagement: React.FC = () => {
       )}
     </div>
   );
-}
+};
 
 export default AdminOrderManagement;

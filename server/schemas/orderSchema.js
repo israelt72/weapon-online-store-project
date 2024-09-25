@@ -21,7 +21,7 @@ const orderSchema = new Schema({
       required: true
     }
   }],
-  total: {  // Ensure this field matches the implementation
+  total: {  
     type: Number,
     required: true,
     min: 0
@@ -32,7 +32,7 @@ const orderSchema = new Schema({
     default: 'pending'
   }
 }, {
-  timestamps: true  // Automatically add createdAt and updatedAt fields
+  timestamps: true  
 });
 
 export default model('Order', orderSchema);

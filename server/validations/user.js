@@ -21,6 +21,9 @@ export const updateUserValidation = (userInfo) => {
         orders: Joi.array().items(Joi.string()).optional(),
         createdAt: Joi.date().optional(),
         updatedAt: Joi.date().optional(),
+        __v:Joi.number().optional(),
+
+
     });
 
     return schema.validate(userInfo);

@@ -16,9 +16,9 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     setImages([
-      '/assets/carousel/img1.jpg',
-      '/assets/carousel/img2.jpg',
-      '/assets/carousel/img3.jpg',
+      '/assets/carousel/img1.webp',
+      '/assets/carousel/img2.webp',
+      '/assets/carousel/img3.webp',
     ]);
   }, []);
 
@@ -67,7 +67,7 @@ const Home: React.FC = () => {
     playSound('interactionSound');
   };
 
-  // Trigger user interaction to play sound if sound is enabled
+  
   useEffect(() => {
     const handleUserInteractionEvent = () => {
       handleUserInteraction();

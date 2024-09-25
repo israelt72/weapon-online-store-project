@@ -59,7 +59,7 @@ const AdminDashboard: React.FC = () => {
 
     // Pagination states
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const itemsPerPage = 7;
+    const itemsPerPage = 4;
 
     useEffect(() => {
         dispatch(fetchProducts());
@@ -169,7 +169,7 @@ const AdminDashboard: React.FC = () => {
 
     return (
         <div className='h1-AdminDashboard'>
-            <h1>Admin Dashboard</h1>
+            <h1 className=' hidden-header'>Admin Dashboard</h1>
             <div className="hide-buttons-container">
                 <button
                     className={`hide-button ${activeButton === 'products' ? 'active' : ''}`}
@@ -356,7 +356,7 @@ const AdminDashboard: React.FC = () => {
                         <div key={product._id} className="product-item">
                            <img src={product.image} alt={product.name} className="product-image" />
                              <div className="product-info">
-                                <h2>{product.name}</h2>
+                                <h2  className='product-name'>{product.name}</h2>
                                 <p>{product.description}</p>
                                 <p>Price: ${product.price}</p>
                                 <p>Category: {product.category}</p>

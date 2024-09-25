@@ -1,17 +1,18 @@
 /* Existing styles */
 
-.h1-AdminDashboard{
-   text-align: center;
+.h1-AdminDashboard {
+    text-align: center;
 
 }
+
 .admin-dashboard {
 
     padding: 20px;
     display: flex;
-    flex-direction:column;
-flex-wrap:wrap ;
-justify-content: center;
-align-items: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
     align-items: center;
     background-color: #f4f4f4;
 }
@@ -27,14 +28,24 @@ align-items: center;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 20px; /* Space between items */
+    gap: 20px;
+    /* Space between items */
+}
+
+.product-name {
+    text-align: center;
+    font-size: 1rem;
+}
+
+.product-info p {
+    font-size: 0.8rem;
 }
 
 .product-item {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    max-width: 300px;
+    max-width: 280px;
     background: #fff;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -49,14 +60,14 @@ align-items: center;
     max-width: 100%;
     height: auto;
     border-bottom: 1px solid #ddd;
-    margin-bottom: 10px;
+
 }
 
 .product-buttons {
     display: flex;
     justify-content: center;
     gap: 10px;
-    margin-top: auto; /* Pushes buttons to the bottom */
+    margin-top: auto;
 }
 
 /* General button styles */
@@ -68,7 +79,7 @@ align-items: center;
     cursor: pointer;
     font-size: 16px;
     font-weight: bold;
-    transition:background 0.3s, transform 0.3s, box-shadow 0.3s;
+    transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-align: center;
 }
@@ -91,7 +102,7 @@ align-items: center;
 .edit-btn:focus {
     outline: none;
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5);
-    
+
 }
 
 /* Delete button styles */
@@ -101,7 +112,7 @@ align-items: center;
     border-radius: 4px;
     border: none;
     padding: 6px;
-    margin-left:15px ;
+    margin-left: 15px;
 }
 
 .delete-btn:hover {
@@ -120,8 +131,9 @@ align-items: center;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 15px; 
-    margin-top: 5px; /* Space above buttons */
+    gap: 15px;
+    margin-top: 5px;
+    /* Space above buttons */
     margin-bottom: 10px;
 }
 
@@ -132,10 +144,10 @@ align-items: center;
     padding: 12px 20px;
     border-radius: 6px;
     cursor: pointer;
-    flex: 1; 
-    max-width: 100px; 
+    flex: 1;
+    max-width: 100px;
     transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
-    text-align: center; 
+    text-align: center;
     position: relative;
     font-size: 14px;
 }
@@ -156,6 +168,7 @@ align-items: center;
     cursor: not-allowed;
     transform: scale(1);
 }
+
 /* Form Input Styles */
 input[type="text"],
 input[type="number"] {
@@ -163,10 +176,12 @@ input[type="number"] {
     margin: 8px 0;
     border: 1px solid #ccc;
     border-radius: 4px;
-    box-sizing: border-box; /* Ensures padding is included in width */
+    box-sizing: border-box;
+    /* Ensures padding is included in width */
     font-size: 16px;
     transition: border-color 0.3s, box-shadow 0.3s;
-    width: 100%; /* Ensures inputs are responsive */
+    width: 100%;
+    /* Ensures inputs are responsive */
 }
 
 input[type="text"]:focus,
@@ -185,20 +200,27 @@ label {
 }
 
 /* Responsive Container */
-.create-form, .edit-form {
-    max-width: 600px; 
-    margin: 0 auto; 
-    padding: 16px;
+.create-form h2 {
+    font-size: 1.2rem;
+
+}
+
+.create-form,
+.edit-form {
+    max-width: 300px;
+    margin: 0 auto;
+    padding: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
 }
 
 /* Button Styles */
 button {
-    padding: 12px 20px;
+
+    padding: 8px 10px;
     margin: 8px 0;
     border: none;
-    border-radius: 4px;
+    border-radius: 10px;
     background-color: #007bff;
     color: white;
     font-size: 16px;
@@ -211,11 +233,10 @@ button:hover {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Pagination Styles */
-.pagination {
+Pagination Styles .pagination {
     display: flex;
     justify-content: center;
-    /* margin-top: 16px; */
+    margin-top: 16px;
 }
 
 .pagination button {
@@ -240,17 +261,16 @@ button:hover {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    margin-bottom: 16px;
+
 }
 
 .hide-buttons-container button {
     flex: 1;
-    max-width: 200px; /* Ensures buttons don’t grow too large */
+    max-width: 200px;
+    /* Ensures buttons don’t grow too large */
     padding: 12px;
     font-size: 16px;
 }
-
-
 
 /* Form Button Styles */
 .create-button,
@@ -259,8 +279,8 @@ button:hover {
     background-color: #28a745;
     color: #fff;
     border: none;
-    padding: 12px 20px;
-    border-radius: 6px;
+    padding: 8px 10px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
@@ -286,31 +306,35 @@ button:hover {
 /* Responsive Styles */
 @media (max-width: 1200px) {
     .product-item {
-        width: 250px; /* Adjust width for medium screens */
+        width: 250px;
+        /* Adjust width for medium screens */
     }
 }
 
 @media (max-width: 992px) {
     .product-item {
-        width: 200px; /* Adjust width for smaller screens */
+        width: 200px;
+        /* Adjust width for smaller screens */
     }
 }
 
 @media (max-width: 768px) {
     .product-item {
-        width: 100%; 
-        margin: 5px 0; 
+        width: 100%;
+        margin: 5px 0;
     }
+
     .product-list {
-        gap: 10px; 
+        gap: 10px;
     }
 
     .admin-dashboard h1 {
-        font-size: 20px; 
+        font-size: 20px;
     }
 
     .edit-delete-btn {
-        padding: 8px 12px; 
-        font-size: 14px; 
+
+        padding: 8px 12px;
+        font-size: 14px;
     }
 }

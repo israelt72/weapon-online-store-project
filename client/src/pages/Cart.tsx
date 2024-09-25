@@ -50,12 +50,12 @@ const Cart: React.FC = () => {
 
     // Ensure all fields are correct and in the right format
     const order = {
-      user: userId, // Ensure this matches your schema
+      user: userId, 
       products: cartItems.map(item => ({
-        product: item.product._id, // Use `product` as per your schema
-        quantity: Number(item.quantity), // Ensure quantity is a number
+        product: item.product._id, 
+        quantity: Number(item.quantity), 
       })),
-      total: Number(calculateTotalPrice(cartItems)), // Ensure total is a number
+      total: Number(calculateTotalPrice(cartItems)), 
       status: 'pending', // Default status
     };
 

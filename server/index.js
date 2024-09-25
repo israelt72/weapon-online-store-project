@@ -32,13 +32,13 @@ mongoose.connect(mongoDbUrl)
     });
 
     app.use('/api/products', productRoutes);
+    app.use('/api/users', userRoutes);
 // Apply authentication middleware before defining routes that require authentication
 app.use(authenticateUser);
 
 // Define routes
 app.use('/api/auth', authRoutes);
 app.use('/api/orders', orderRoutes);
-app.use('/api/users', userRoutes);
 
 // Apply admin middleware for specific routes if needed
 app.use('/api/admin', isAdmin); // Apply admin check to /api/admin routes
@@ -48,7 +48,7 @@ app.get('/', (req, res) => {
     res.send('API is running...');
 });
 
-// Use error handling middleware
+
 app.use(notFound);
 app.use(errorHandler);
 

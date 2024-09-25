@@ -10,9 +10,9 @@ import { createOrderValidation, updateOrderValidation } from '../validations/ord
 
 const router = express.Router();
 
-/**
- * Middleware to check if the user is admin
- */
+
+ // Middleware to check if the user is admin
+ 
 const authorizeAdmin = (req, res, next) => {
   if (!req.user || req.user.role !== 'admin') {
     return res.status(403).send({ error: 'Access denied' });
@@ -20,9 +20,9 @@ const authorizeAdmin = (req, res, next) => {
   next();
 };
 
-/**
- * Create a new order => http://localhost:3000/api/orders
- */
+
+ // Create a new order => http://localhost:3000/api/orders
+
 router.post('/', authenticateUser, async (req, res) => {
   if (!req.user) {
     return res.status(401).send({ message: 'Authentication required' });
@@ -91,10 +91,10 @@ router.post('/', authenticateUser, async (req, res) => {
   }
 });
 
-/**
- * Get all orders => http://localhost:3000/api/orders
- * Admin only
- */
+
+// Get all orders => http://localhost:3000/api/orders
+ // Admin only
+ 
 router.get('/', authenticateUser, authorizeAdmin, async (req, res) => {
   if (!req.user) {
     return res.status(401).send({ message: 'Authentication required' });
@@ -110,9 +110,9 @@ router.get('/', authenticateUser, authorizeAdmin, async (req, res) => {
   }
 });
 
-/**
- * Get all orders for the currently logged-in user => http://localhost:3000/api/orders/my
- */
+
+ // Get all orders for the currently logged-in user => http://localhost:3000/api/orders/my
+ 
 router.get('/my', authenticateUser, async (req, res) => {
   if (!req.user) {
     return res.status(401).send({ message: 'Authentication required' });
@@ -128,9 +128,9 @@ router.get('/my', authenticateUser, async (req, res) => {
   }
 });
 
-/**
- * Get a specific order by ID => http://localhost:3000/api/orders/:id
- */
+
+ // Get a specific order by ID => http://localhost:3000/api/orders/:id
+ 
 router.get('/:id', authenticateUser, async (req, res) => {
   if (!req.user) {
     return res.status(401).send({ message: 'Authentication required' });
@@ -154,9 +154,9 @@ router.get('/:id', authenticateUser, async (req, res) => {
   }
 });
 
-/**
- * Update a specific order by ID => http://localhost:3000/api/orders/:id
- */
+
+  //Update a specific order by ID => http://localhost:3000/api/orders/:id
+ 
 router.patch('/:id', authenticateUser, async (req, res) => {
   if (!req.user) {
     return res.status(401).send({ message: 'Authentication required' });
@@ -197,17 +197,19 @@ router.patch('/:id', authenticateUser, async (req, res) => {
         };
       }));
 
-      const totalAmount = await calculateTotalPrice(validatedProducts);
-
       order.products = validatedProducts.map(item => ({
         product: item.product,
         quantity: item.quantity
       }));
-      order.total = totalAmount;
     }
 
     if (status) {
       order.status = status;
+    }
+
+    
+    if (req.body.total !== undefined) {
+      order.total = req.body.total; 
     }
 
     await order.save();
@@ -222,10 +224,10 @@ router.patch('/:id', authenticateUser, async (req, res) => {
   }
 });
 
-/**
- * Delete a specific order by ID => http://localhost:3000/api/orders/:id
- * Admin only
- */
+
+//Delete a specific order by ID => http://localhost:3000/api/orders/:id
+ // Admin only
+ 
 router.delete('/:id', authenticateUser, authorizeAdmin, async (req, res) => {
   if (!req.user) {
     return res.status(401).send({ message: 'Authentication required' });
@@ -239,13 +241,11 @@ router.delete('/:id', authenticateUser, authorizeAdmin, async (req, res) => {
       return res.status(400).send({ error: 'Invalid order ID' });
     }
 
-    // מחיקת ההזמנה
     const order = await Order.findByIdAndDelete(orderId);
     if (!order) {
       return res.status(404).send({ error: 'Order not found' });
     }
 
-    // עדכון מסמכי המשתמשים
     await User.updateMany(
       { orders: orderId },
       { $pull: { orders: orderId } }

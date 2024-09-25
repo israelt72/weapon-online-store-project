@@ -73,13 +73,13 @@ api.interceptors.response.use(
       }
     } else if (status === 403) {
       console.error('Access denied:', response.data.message);
-      // Propagate forbidden error with additional info
+      
       const customError = new Error('Access denied') as any;
       customError.needRedirect = true;
       return Promise.reject(customError);
     } else if (status === 404) {
       console.error('Not found:', response.data.message);
-      // Propagate not found error with additional info
+      
       const customError = new Error('Not found') as any;
       customError.needRedirect = true;
       return Promise.reject(customError);

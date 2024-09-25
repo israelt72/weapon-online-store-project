@@ -68,7 +68,7 @@ const App: React.FC = () => {
             
             {/* Protected routes */}
             <Route path="/profile" element={<PrivateRoute isAuthenticated={!!token} element={<Profile />} />} />
-            {/* <Route path="/myOrders" element={<PrivateRoute isAuthenticated={!!token} element={<MyOrders />} />} /> */}
+            
 
             Admin routes
             <Route path="/admin" element={<AdminRoute isAdmin={isAdmin} element={<AdminDashboard />} />} />

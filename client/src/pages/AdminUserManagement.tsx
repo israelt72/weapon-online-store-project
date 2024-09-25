@@ -25,10 +25,13 @@ const AdminUserManagement: React.FC = () => {
         email: '',
         role: '',
     });
+
+    const [newPassword, setNewPassword] = useState<string>(''); 
+
     // Pagination states
     const [currentPage, setCurrentPage] = useState<number>(1);
     const itemsPerPage = 7;
-    
+
     useEffect(() => {
         const loadUsers = async () => {
             try {
@@ -39,8 +42,7 @@ const AdminUserManagement: React.FC = () => {
                 console.error("Failed to fetch users:", error);
             }
         };
-       
-        
+
         loadUsers();
     }, [dispatch]);
 
@@ -63,6 +65,7 @@ const AdminUserManagement: React.FC = () => {
         console.log("Editing user:", user);
         setSelectedUser(user);
         setUpdatedUser(user);
+        setNewPassword(''); // Reset the password field when editing a user
     };
 
     const handleUpdateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,11 +73,19 @@ const AdminUserManagement: React.FC = () => {
         setUpdatedUser({ ...updatedUser, [e.target.name]: e.target.value });
     };
 
+    const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        console.log("Setting new password:", e.target.value);
+        setNewPassword(e.target.value);
+    };
+
     const handleUpdateSubmit = async () => {
         if (selectedUser) {
             console.log("Submitting update for user:", updatedUser);
             try {
-                await dispatch(updateProfile(updatedUser));
+                // Include new password if it was changed
+                const userToUpdate = newPassword ? { ...updatedUser, password: newPassword } : updatedUser;
+                console.log("User data to update:", userToUpdate);
+                await dispatch(updateProfile(userToUpdate));
                 console.log("User updated successfully.");
                 setSelectedUser(null);
             } catch (error) {
@@ -135,14 +146,23 @@ const AdminUserManagement: React.FC = () => {
                             onChange={handleUpdateChange}
                         />
                     </label>
-                    <div>
+                    <label>
+                        New Password:
+                        <input
+                            type="password"
+                            name="password"
+                            value={newPassword}
+                            onChange={handlePasswordChange}
+                        />
+                    </label>
+                    <div className="btn-for-update-user">
                         <button onClick={handleUpdateSubmit}>Update User</button>
                         <button onClick={() => setSelectedUser(null)}>Cancel</button>
                     </div>
                 </div>
             )}
+            <h2>Users</h2>
             <div className="user-list">
-                <h2>Users</h2>
                 {currentUsers.length > 0 ? (
                     currentUsers.map((user: User) => (
                         <div key={user.id} className="user-item">

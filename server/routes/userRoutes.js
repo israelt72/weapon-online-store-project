@@ -1,4 +1,5 @@
 // routes/userRoutes.js
+// routes/userRoutes.js
 import { Router } from 'express';
 import User from '../schemas/userSchema.js';
 import { authenticateUser, comparePasswords, generateToken, hashPassword } from '../middleware/auth.js';
@@ -16,10 +17,9 @@ const handleError = (res, error, message = 'Server error') => {
 // Register
 router.post('/register', async (req, res) => {
   const { firstName, lastName, email, password, role } = req.body;
-  
+
   console.log('Register request body:', req.body);
 
-  // Validate request data
   const { error } = registerValidation({ firstName, lastName, email, password });
   if (error) {
     console.log('Register validation error:', error.details[0].message);
@@ -27,24 +27,17 @@ router.post('/register', async (req, res) => {
   }
 
   try {
-    // Check if user already exists
     let user = await User.findOne({ email });
     if (user) {
       console.log('User already exists:', email);
       return res.status(400).send({ error: 'User already exists' });
     }
 
-    // Create new user
     user = new User({ firstName, lastName, email, password, role });
-
-    // Hash password
     user.password = await hashPassword(password);
-
-    // Save user to the database
     await user.save();
     console.log('User registered successfully:', user);
 
-    // Send response
     return res.status(201).send({
       msg: 'User registered successfully',
       user: {
@@ -63,10 +56,9 @@ router.post('/register', async (req, res) => {
 // Login
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
-  
+
   console.log('Login request body:', req.body);
 
-  // Validate request data
   const { error } = loginValidation({ email, password });
   if (error) {
     console.log('Login validation error:', error.details[0].message);
@@ -86,11 +78,9 @@ router.post('/login', async (req, res) => {
       return res.status(400).send({ error: 'Invalid credentials' });
     }
 
-    // Generate JWT token
     const token = generateToken(user._id.toString(), user.role);
     console.log('Generated token for user:', user.email);
 
-    // Send response
     return res.status(200).send({
       msg: 'User logged in',
       token,
@@ -124,8 +114,9 @@ router.get('/profile', authenticateUser, async (req, res) => {
 });
 
 // Update Profile
-router.put('/profile', authenticateUser, async (req, res) => {
-  // Validate request data
+router.put('/profile/:id', authenticateUser, async (req, res) => {
+  const userIdToUpdate = req.params.id;
+
   const { error } = updateUserValidation(req.body);
   if (error) {
     console.log('Update Profile validation error:', error.details[0].message);
@@ -135,11 +126,19 @@ router.put('/profile', authenticateUser, async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
 
   try {
-    console.log('Update Profile request for user ID:', req.user.id);
-    const user = await User.findById(req.user.id);
+    console.log('Update Profile request for user ID:', userIdToUpdate);
+    const user = await User.findById(userIdToUpdate);
     if (!user) {
-      console.log('User not found for update:', req.user.id);
+      console.log('User not found for update:', userIdToUpdate);
       return res.status(404).send({ error: 'User not found' });
+    }
+
+    // Only check for existing email if it's different from the current one
+    if (email && email !== user.email) {
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+        return res.status(400).send({ error: 'Email already in use' });
+      }
     }
 
     // Update user details
@@ -151,7 +150,7 @@ router.put('/profile', authenticateUser, async (req, res) => {
     if (password) user.password = await hashPassword(password);
 
     await user.save();
-    console.log('Profile updated for user ID:', req.user.id);
+    console.log('Profile updated for user ID:', userIdToUpdate);
 
     res.status(200).send({ msg: 'Profile updated', user });
   } catch (error) {
@@ -163,7 +162,7 @@ router.put('/profile', authenticateUser, async (req, res) => {
 router.get('/', authenticateUser, async (req, res) => {
   try {
     console.log('Get all users request');
-    const users = await User.find();//.select('-password');
+    const users = await User.find().select('-password');
     res.status(200).send(users);
   } catch (error) {
     handleError(res, error, 'Get Users error');

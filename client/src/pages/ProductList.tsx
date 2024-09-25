@@ -7,9 +7,9 @@ import { AppDispatch } from '../app/appStore';
 import Pagination from '../components/Pagination';
 
 // Constants for card dimensions
-const CARD_WIDTH = 322; 
-const CARD_HEIGHT = 430; 
-const GUTTER = 16; 
+const CARD_WIDTH = 305;
+const CARD_HEIGHT = 430;
+const GUTTER = 16;
 
 const ProductList: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -17,7 +17,7 @@ const ProductList: React.FC = () => {
   const status = useSelector(selectProductStatus);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(14); // Default value
+  const [itemsPerPage, setItemsPerPage] = useState(14);
 
   useEffect(() => {
     if (status === 'idle') {

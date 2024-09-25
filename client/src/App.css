@@ -18,17 +18,11 @@ html, body {
   display: flex;
   flex-direction: column;
   flex: 1;
- 
-
 }
-
 .content {
   flex: 1;
 }
-
-
 /* Auth page styles */
-
  .auth-container {
   display: flex;
   justify-content: center;

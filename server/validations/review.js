@@ -16,9 +16,9 @@ export const createReviewValidation = (reviewInfo) => {
 export const updateReviewValidation = (reviewInfo) => {
     // Exclude _id from the update schema
     const schema = Joi.object({
-        rating: Joi.number().integer().min(1).max(5).optional(),  // Rating can be a number between 1 and 5, but is optional
-        comment: Joi.string().min(2).max(1000).optional(),  // Comment can be a string with 5 to 1000 characters, but is optional
-    }).unknown(true); // Allow additional fields, but not specifically _id
+        rating: Joi.number().integer().min(1).max(5).optional(),  
+        comment: Joi.string().min(2).max(1000).optional(),  
+    }).unknown(true); 
 
     // Return the result of the validation
     return schema.validate(reviewInfo);  

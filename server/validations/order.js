@@ -23,10 +23,29 @@ export const updateOrderValidation = (orderInfo) => {
         status: Joi.string().valid('pending', 'completed', 'shipped', 'cancelled').optional(),
         products: Joi.array().items(
             Joi.object({
-                product: Joi.string().optional(),
+                product: Joi.object({
+                    _id: Joi.string().optional(),
+                    name: Joi.string().optional(),
+                    description: Joi.string().optional(),
+                    price: Joi.number().optional(),
+                    category: Joi.string().optional(),
+                    image: Joi.string().optional(),
+                    stock: Joi.number().optional(),
+                    reviews: Joi.array().items(
+                        Joi.object({
+                            user: Joi.string().optional(),
+                            rating: Joi.number().optional(),
+                            comment: Joi.string().optional()
+                        })
+                    ).optional(),
+                    createdAt: Joi.date().optional(),
+                    updatedAt: Joi.date().optional(),
+                    __v: Joi.number().optional()
+                }).optional(),
                 quantity: Joi.number().integer().min(1).optional()
             })
-        ).optional()
+        ).optional(),
+        total: Joi.number().optional()
     });
     return schema.validate(orderInfo);
 };

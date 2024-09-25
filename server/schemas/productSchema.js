@@ -21,7 +21,7 @@ const reviewSchema = new Schema({
     minlength: 10,
     maxlength: 1000
   }
-}, { _id: false }); // Disable _id field for review subdocuments
+}, { _id: false }); 
 
 const productSchema = new Schema({
   name: {

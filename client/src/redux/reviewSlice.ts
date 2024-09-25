@@ -50,6 +50,15 @@ export const updateReview = createAsyncThunk(
   }
 );
 
+// Delete review
+export const deleteReview = createAsyncThunk(
+  'reviews/deleteReview',
+  async ({ productId, reviewId }: { productId: string; reviewId: string }) => {
+    await api.delete(`/products/${productId}/reviews/${reviewId}`);
+    return reviewId; 
+  }
+);
+
 const reviewSlice = createSlice({
   name: 'reviews',
   initialState,
@@ -60,21 +69,56 @@ const reviewSlice = createSlice({
         state.status = 'loading';
       })
       .addCase(fetchReviews.fulfilled, (state, action: PayloadAction<Review[]>) => {
-        state.status = 'succeeded';
-        state.reviews = action.payload;
+        if (Array.isArray(action.payload)) {
+          state.reviews = action.payload;
+          state.status = 'succeeded';
+          state.error = null; 
+        } else {
+          state.status = 'failed';
+          state.error = 'Received data is not an array';
+        }
       })
       .addCase(fetchReviews.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message || 'Failed to fetch reviews';
       })
+      .addCase(addReview.pending, (state) => {
+        state.status = 'loading';
+      })
       .addCase(addReview.fulfilled, (state, action: PayloadAction<Review>) => {
         state.reviews.push(action.payload);
+        state.status = 'succeeded';
+        state.error = null; 
+      })
+      .addCase(addReview.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message || 'Failed to add review';
+      })
+      .addCase(updateReview.pending, (state) => {
+        state.status = 'loading';
       })
       .addCase(updateReview.fulfilled, (state, action: PayloadAction<Review>) => {
         const index = state.reviews.findIndex(review => review._id === action.payload._id);
         if (index !== -1) {
           state.reviews[index] = action.payload;
         }
+        state.status = 'succeeded';
+        state.error = null; 
+      })
+      .addCase(updateReview.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message || 'Failed to update review';
+      })
+      .addCase(deleteReview.fulfilled, (state, action: PayloadAction<string>) => {
+        const index = state.reviews.findIndex(review => review._id === action.payload);
+        if (index !== -1) {
+          state.reviews.splice(index, 1); 
+        }
+        state.status = 'succeeded';
+      })
+      .addCase(deleteReview.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message || 'Failed to delete review';
       });
   },
 });

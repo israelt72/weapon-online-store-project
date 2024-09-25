@@ -1,6 +1,6 @@
 // src/redux/productSlice.ts
 import { createSlice, createAsyncThunk, PayloadAction, createSelector } from '@reduxjs/toolkit';
-import api from '../utils/api'; // Ensure this imports your axios instance
+import api from '../utils/api'; 
 
 // Define Review type with _id
 export interface Review {

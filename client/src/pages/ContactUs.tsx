@@ -18,9 +18,7 @@ const ContactUs: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission, e.g., send data to an API
-    console.log(formData);
-    // Reset form
+    
     setFormData({ name: '', email: '', message: '' });
   };
 

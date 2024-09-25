@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { loginUser, selectError, selectStatus } from '../redux/userSlice';
 import { AppDispatch, RootState } from '../app/appStore';
-// import '../components/styles.css';
+
 import'./login.css';
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');

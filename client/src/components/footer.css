@@ -1,116 +1,150 @@
 /* Set html and body to 100% height */
-html, body {
-    height: auto;
-    margin: 0;
-  }
-  
-  /* Flex container to push footer down */ 
-  #root {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh; 
-  } 
-  
-  /* Footer styles */
+html,
+body {
+  height: auto;
+  margin: 0;
+}
+
+/* Flex container to push footer down */
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Footer styles */
+.footer {
+
+  background-color: #343a40;
+  color: #f8f9fa;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-top: 1px solid #e0e0e0;
+  width: 100%;
+
+}
+
+.product-footer {
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+
+}
+
+/* Footer content layout */
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  margin-bottom: 1rem;
+}
+
+.footer-left,
+.footer-middle,
+.footer-right {
+  flex: 1;
+  padding: 0 1rem;
+}
+
+.footer-left h4,
+.footer-middle h4,
+.footer-right h4 {
+
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: chartreuse;
+  text-align: center;
+}
+
+.footer-left p,
+.footer-middle ul,
+.footer-right p {
+  font-size: 0.9rem;
+}
+
+.footer-middle ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-middle ul li {
+  margin-bottom: 0.5rem;
+}
+
+.footer-middle ul li a {
+  color: #f8f9fa;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-middle ul li a:hover {
+  color: #007bff;
+  text-decoration: underline;
+}
+
+/* Footer bottom */
+.footer-bottom {
+  text-align: center;
+}
+
+.footer-bottom p {
+  font-size: 0.8rem;
+  margin: 0;
+  padding: 1rem 0;
+  border-top: 1px solid #e0e0e0;
+}
+
+/* Responsive layout */
+@media (max-width: 768px) {
   .footer {
-   
-    background-color: #343a40; /* Dark background color */
-    color: #f8f9fa; /* Light text color */
-   
     display: flex;
     flex-direction: column;
     align-items: center;
-    border-top: 1px solid #e0e0e0; /* Subtle border on top */
-    margin-top: auto;
-    width: 100%; /* Full width */
-    max-height:230px ;
+    justify-content: center;
+    height: auto;
   }
-  
-    .product-footer {
-      width: 90%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 10px;
-      
-    }
-  /* Footer content layout */
+
   .footer-content {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 1200px;
-    margin-bottom: 1rem;
-  }
-  
-  .footer-left, .footer-middle, .footer-right {
-    flex: 1;
-    padding: 0 1rem;
-  }
-  
-  .footer-left h4, .footer-middle h4, .footer-right h4 {
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-  }
-  
-  .footer-left p, .footer-middle ul, .footer-right p {
-    font-size: 0.9rem;
-  }
-  
-  .footer-middle ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .footer-middle ul li {
-    margin-bottom: 0.5rem;
-  }
-  
-  .footer-middle ul li a {
-    color: #f8f9fa;
-    text-decoration: none;
-    transition: color 0.3s ease;
-  }
-  
-  .footer-middle ul li a:hover {
-    color: #007bff;
-    text-decoration: underline;
-  }
-  
-  /* Footer bottom */
-  .footer-bottom {
+    flex-direction: column;
     text-align: center;
   }
-  
-  .footer-bottom p {
-    font-size: 0.8rem;
-    margin: 0;
-    padding: 1rem 0;
-    border-top: 1px solid #e0e0e0;
+
+  .footer-left,
+  .footer-middle,
+  .footer-right {
+    padding: 0;
+    margin-bottom: 1rem;
+    margin: auto;
   }
-  
-  /* Responsive layout */
-  @media (max-width: 768px) {
-    .footer-content {
-      flex-direction: column;
-      text-align: center;
-    }
-  
-    .footer-left, .footer-middle, .footer-right {
-      padding: 0;
-      margin-bottom: 1rem;
-    }
-  
-    .footer-middle ul {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-  
-    .footer-middle ul li {
-      margin-bottom: 0.2rem;
-    }
+
+  .footer-middle ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
-  
+
+  .footer-middle ul li {
+    margin-bottom: 0.2rem;
+
+  }
+  .footer-about {
+    justify-content: center;
+    align-items: center;
+    max-width: 290px;
+  }
+.footer-left h4{
+  display: none;
+
+}
+.footer-left p{
+  display: none;
+}
+
+}

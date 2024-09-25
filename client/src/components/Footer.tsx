@@ -8,7 +8,7 @@ const Footer: React.FC = () => {
       <div className="footer-content">
         <div className="footer-left">
           <h4>About Us</h4>
-          <p>
+          <p className='footer-about'>
             We are an eCommerce company dedicated to providing the best online shopping experience. 
             Our mission is to offer high-quality products at competitive prices.
           </p>

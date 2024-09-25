@@ -23,6 +23,10 @@
 
 /* Card Profile */
 .card-profile {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
   border: 1px solid #ddd;
   padding: 20px;
   border-radius: 5px;

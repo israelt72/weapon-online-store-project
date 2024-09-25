@@ -10,11 +10,14 @@
     background-color: #f9f9f9;
     gap: 15px;
 }
-
+.hidden-header{
+    display: none;
+}
 .order-preview-container {
     display: flex;
     justify-content: center;
     align-items: center;
+    
     flex-wrap: wrap;
     gap: 15px;
 }
@@ -27,14 +30,14 @@
     border-radius: 8px;
     background: #89a5b6;
     padding: 15px;
-    box-sizing: border-box; /* Makes sure padding is included in width */
-    overflow: hidden; /* Prevents text overflow */
+    box-sizing: border-box; 
+    overflow: hidden; 
 }
 
 .order-preview h4 {
-    white-space: nowrap; /* Prevents text from wrapping */
+    white-space: nowrap; 
     overflow: hidden;
-    text-overflow: ellipsis; /* Adds "..." for overflowing text */
+    text-overflow: ellipsis; 
 }
 
 .order-item {
@@ -47,7 +50,7 @@
     background-color: #fff;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 600px;
+    max-width: 500px;
     transition: transform 0.2s ease;
 }
 
@@ -57,7 +60,7 @@
 
 .order-item h3 {
     margin-top: 0;
-    font-size: 1.25em;
+    font-size: 1 rem;
     color: #333;
 }
 
@@ -173,15 +176,17 @@ input[type="number"]::-webkit-outer-spin-button {
 @media (max-width: 480px) {
     .order-preview {
         flex: 1 1 100%; /* 1 item in a row */
-        /* max-width: 100%; */
-    }
+       
 
     .order-item, .order-edit-form {
-        padding: 15px; 
+        padding: 5px; 
     }
 
     .order-buttons button, .edit-buttons button {
         padding: 8px 16px;
         font-size: 0.875rem; 
+    }
+    
+   
     }
 }

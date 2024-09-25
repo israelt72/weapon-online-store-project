@@ -92,7 +92,7 @@ const ProductDetails: React.FC = () => {
   };
 
   const handleReviewSubmit = () => {
-    // We assume user is logged in, so no need to check login status here.
+
     if (!id) {
       console.error('Product ID is missing');
       return;
@@ -104,8 +104,8 @@ const ProductDetails: React.FC = () => {
     }
 
     const newReview: Review = {
-      _id: '', // ID to be generated automatically by the server
-      user: 'placeholderUserId', // Replace with actual user ID if available
+      _id: '',
+      user: 'placeholderUserId', 
       rating: reviewRating,
       comment: reviewComment,
     };
